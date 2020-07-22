@@ -4,9 +4,13 @@
     "type": 3,
     "vendor": "Jaguar",
     "aliases": [],
-    "parentRequirements": [],
+    "parentRequirements": [
+        "{DC086781-C8F0-70A0-4E04-6E9BC6A07F11}"
+    ],
     "childRequirements": [],
-    "implemented": [],
-    "prefix": "JAGUAR",
+    "implemented": [
+        "{FA309A74-4411-BDA0-1396-0F3B9F421BBF}"
+    ],
+    "prefix": "JIC",
     "url": "https://deinsmarthome.info"
 }

@@ -1,8 +1,20 @@
 {
     "translations": {
         "de": {
-            "Translation 1": "Übersetzung 1",
-            "Translation 2": "Übersetzung 2"
+            "Update Interval": "Updateintervall",
+            "seconds": "Sekunden",
+            "Range in Comfort Mode": "Reichweite im Komfort Modus",
+            "Charging Status": "Ladestatus",
+            "Cable plugged in": "Kabel angesteckt",
+            "Charging Method": "Lademethode",
+            "Charging Rate KM": "Laderate KM",
+            "SOC": "SOC",
+            "Charging": "Lädt",
+            "Range": "Reichweite",
+            "Time to 100% SOC": "Zeit bis 100% SOC",
+            "Charge Type": "Ladeart",
+            "Charging Rate SOC": "Laderate SOC",
+            "Range in Eco Mode": "Reichweite im Eco Modus"
         }
     }
 }

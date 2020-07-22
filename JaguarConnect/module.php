@@ -88,8 +88,18 @@ class JaguarConnect extends IPSModule
         $data = json_decode($JSONString);
 
         switch ($data->Buffer->Command) {
-
+            case 'getVersionV3':
+                $result = $this->getVehicleStatus(3);
+                break;
+            case 'getVersion':
+                $result = $this->getVehicleStatus(0);
+                break;
+            default:
+            $this->SendDebug(__FUNCTION__, $data->Buffer->Command, 0);
+            break;
         }
+        $this->SendDebug(__FUNCTION__, json_encode($result), 0);
+        return json_encode($result);
     }
 
     public function getVehicleStatus($version)
