@@ -1,0 +1,12 @@
+{
+    "id": "{3628245E-C11C-BB8B-9DBD-6C0D4E947615}",
+    "name": "Jaguar InControl",
+    "author": "Kai Schnittcher",
+    "url": "https://deinsmarthome.info",
+    "compatibility": {
+        "version": "5.0"
+    },
+    "version": "1.0",
+    "build": 0,
+    "date": 0
+}

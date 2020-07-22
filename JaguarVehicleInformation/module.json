@@ -1,0 +1,12 @@
+{
+    "id": "{6FA4B344-F737-AC45-A961-B0CF336BD76C}",
+    "name": "JaguarVehicleInformation",
+    "type": 3,
+    "vendor": "Jaguar",
+    "aliases": [],
+    "parentRequirements": [],
+    "childRequirements": [],
+    "implemented": [],
+    "prefix": "JAGUAR",
+    "url": "https://deinsmarthome.info"
+}

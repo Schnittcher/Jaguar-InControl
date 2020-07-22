@@ -1,0 +1,16 @@
+{
+    "id": "{1E0A240F-CBBC-B6BE-1505-D5107CED57BE}",
+    "name": "JaguarVehicleControl",
+    "type": 3,
+    "vendor": "Jaguar",
+    "aliases": [],
+    "parentRequirements": [
+        "{DC086781-C8F0-70A0-4E04-6E9BC6A07F11}"
+    ],
+    "childRequirements": [],
+    "implemented": [
+        "{FA309A74-4411-BDA0-1396-0F3B9F421BBF}"
+    ],
+    "prefix": "JAVGUAR",
+    "url": "https://deinsmarthome.info"
+}
