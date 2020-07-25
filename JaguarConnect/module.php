@@ -228,10 +228,24 @@ class JaguarConnect extends IPSModule
         $apiResult = curl_exec($ch);
         $this->SendDebug(__FUNCTION__ . ' API Result', $apiResult, 0);
         curl_close($ch);
+        $this->deviceRegistration();
+        $this->loginUser();
+
+        return;
     }
 
     private function getRequest($url, $header)
     {
+        $accessToken = $this->ReadAttributeString('access_token');
+        $tokenExpires = $this->ReadAttributeString('TokenExpires');
+
+
+        if ($accessToken == '' || time() >= intval(time() + $tokenExpires)) {
+            if ($this->refreshToken()) {
+                $this->LogMessage('Token expired, refresh Token',KL_NOTIFY);
+                $accessToken = $this->ReadAttributeString('Token');
+            }
+        }
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $url);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
