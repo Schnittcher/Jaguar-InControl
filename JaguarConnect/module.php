@@ -205,6 +205,9 @@ class JaguarConnect extends IPSModule
 
         $this->WriteAttributeString('TokenExpires', $TokenExpires);
         $this->WriteAttributeString('access_token', $access_token);
+
+        $this->deviceRegistration();
+        $this->loginUser();
     }
 
     private function deviceRegistration()
@@ -228,8 +231,6 @@ class JaguarConnect extends IPSModule
         $apiResult = curl_exec($ch);
         $this->SendDebug(__FUNCTION__ . ' API Result', $apiResult, 0);
         curl_close($ch);
-        $this->deviceRegistration();
-        $this->loginUser();
 
         return;
     }
