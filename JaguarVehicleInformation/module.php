@@ -110,5 +110,12 @@ class JaguarVehicleInformation extends IPSModule
                 $this->SendDebug('Variable not exist', 'Key: ' . $Value['key'] . ' - Value: ' . $Value['value'], 0);
             }
         }
+        foreach ($Data['vehicleStatus']['coreStatus'] as $Value) {
+            if (@$this->GetIDForIdent($Value['key']) != false) {
+                $this->SetValue($Value['key'], $Value['value']);
+            } else {
+                $this->SendDebug('Variable not exist', 'Key: ' . $Value['key'] . ' - Value: ' . $Value['value'], 0);
+            }
+        }
     }
 }
