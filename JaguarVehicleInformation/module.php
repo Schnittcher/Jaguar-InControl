@@ -46,33 +46,32 @@ class JaguarVehicleInformation extends IPSModule
         $this->RegisterVariableFloat('EV_RANGE_ECOx10', $this->Translate('Range in Eco Mode'), 'JIC.Range');
 
         $this->RegisterVariableBoolean('DOOR_IS_ALL_DOORS_LOCKED', $this->Translate('All Doors locked'), 'JIC.Lock');
-        $this->RegisterVariableBoolean('DOOR_FRONT_LEFT_POSITION',$this->Translate('Door front left'), 'JIC.Position');
-        $this->RegisterVariableBoolean('DOOR_REAR_RIGHT_POSITION',$this->Translate('Door rear left'), 'JIC.Position');
-        $this->RegisterVariableString('TYRE_STATUS_REAR_LEFT',$this->Translate('Tyre status rear left'), '');
-        $this->RegisterVariableBoolean('DOOR_REAR_RIGHT_LOCK_STATUS',$this->Translate('Door rear right status'), 'JIC.Lock');
-        $this->RegisterVariableBoolean('DOOR_FRONT_RIGHT_POSITION',$this->Translate('Door front right'), 'JIC.Position');
-        $this->RegisterVariableBoolean('DOOR_REAR_LEFT_LOCK_STATUS',$this->Translate('Door rear left status'), 'JIC.Lock');
-        $this->RegisterVariableBoolean('DOOR_ENGINE_HOOD_POSITION',$this->Translate('Door Engine hood'), 'JIC.Position');
-        $this->RegisterVariablestring('TYRE_STATUS_FRONT_LEFT',$this->Translate('Tyre status front left'), '');
-        $this->RegisterVariableBoolean('THEFT_ALARM_STATUS',$this->Translate('Alarm status'), '~Alert');
-        $this->RegisterVariableFloat('EXT_KILOMETERS_TO_SERVICE',$this->Translate('Kilometers until Service'), 'JIC.Range');
-        $this->RegisterVariableString('VEHICLE_STATE_TYPE',$this->Translate('Vehicle state'), '');
-        $this->RegisterVariableBoolean('DOOR_ENGINE_HOOD_LOCK_STATUS',$this->Translate('Door engine hood status'), 'JIC.Lock');
-        $this->RegisterVariableString('TYRE_STATUS_FRONT_RIGHT',$this->Translate('Tyre status front right'), '');
-        $this->RegisterVariableBoolean('DOOR_FRONT_RIGHT_LOCK_STATUS',$this->Translate('Door front right status'), 'JIC.Lock');
-        $this->RegisterVariableFloat('TYRE_PRESSURE_REAR_RIGHT',$this->Translate('Tyre Presure rear right'), 'JIC.Preasure');
-        $this->RegisterVariableBoolean('DOOR_FRONT_LEFT_LOCK_STATUS',$this->Translate('Door front left status'), 'JIC.Lock');
-        $this->RegisterVariableBoolean('WINDOW_REAR_LEFT_STATUS',$this->Translate('Window rear left'), 'JIC.Position');
-        $this->RegisterVariableFloat('TYRE_PRESSURE_FRONT_RIGHT',$this->Translate('Tyre Presure front right'), 'JIC.Preasure');
-        $this->RegisterVariableBoolean('DOOR_BOOT_POSITION',$this->Translate('Trunk'), 'JIC.Position');
-        $this->RegisterVariableFloat('TYRE_PRESSURE_FRONT_LEFT',$this->Translate('Tyre Presure front left'), 'JIC.Preasure');
-        $this->RegisterVariableFloat('ODOMETER_METER',$this->Translate('Mileage'), 'JIC.Range');
-        $this->RegisterVariableFloat('BATTERY_VOLTAGE',$this->Translate('Battery voltage'), '~Volt');
-        $this->RegisterVariableFloat('TYRE_PRESSURE_REAR_LEFT',$this->Translate('Tyre Presure rear left'), 'JIC.Preasure');
-        $this->RegisterVariableBoolean('WINDOW_FRONT_LEFT_STATUS',$this->Translate('Window front left'), 'JIC.Position');
-        $this->RegisterVariableString('TYRE_STATUS_REAR_RIGHT',$this->Translate('Tyre status rear right'), '');
-        $this->RegisterVariableBoolean('DOOR_BOOT_LOCK_STATUS',$this->Translate('Trunk Status'), 'JIC.Lock');
- 
+        $this->RegisterVariableBoolean('DOOR_FRONT_LEFT_POSITION', $this->Translate('Door front left'), 'JIC.Position');
+        $this->RegisterVariableBoolean('DOOR_REAR_RIGHT_POSITION', $this->Translate('Door rear left'), 'JIC.Position');
+        $this->RegisterVariableString('TYRE_STATUS_REAR_LEFT', $this->Translate('Tyre status rear left'), '');
+        $this->RegisterVariableBoolean('DOOR_REAR_RIGHT_LOCK_STATUS', $this->Translate('Door rear right status'), 'JIC.Lock');
+        $this->RegisterVariableBoolean('DOOR_FRONT_RIGHT_POSITION', $this->Translate('Door front right'), 'JIC.Position');
+        $this->RegisterVariableBoolean('DOOR_REAR_LEFT_LOCK_STATUS', $this->Translate('Door rear left status'), 'JIC.Lock');
+        $this->RegisterVariableBoolean('DOOR_ENGINE_HOOD_POSITION', $this->Translate('Door Engine hood'), 'JIC.Position');
+        $this->RegisterVariablestring('TYRE_STATUS_FRONT_LEFT', $this->Translate('Tyre status front left'), '');
+        $this->RegisterVariableBoolean('THEFT_ALARM_STATUS', $this->Translate('Alarm status'), '~Alert');
+        $this->RegisterVariableFloat('EXT_KILOMETERS_TO_SERVICE', $this->Translate('Kilometers until Service'), 'JIC.Range');
+        $this->RegisterVariableString('VEHICLE_STATE_TYPE', $this->Translate('Vehicle state'), '');
+        $this->RegisterVariableBoolean('DOOR_ENGINE_HOOD_LOCK_STATUS', $this->Translate('Door engine hood status'), 'JIC.Lock');
+        $this->RegisterVariableString('TYRE_STATUS_FRONT_RIGHT', $this->Translate('Tyre status front right'), '');
+        $this->RegisterVariableBoolean('DOOR_FRONT_RIGHT_LOCK_STATUS', $this->Translate('Door front right status'), 'JIC.Lock');
+        $this->RegisterVariableFloat('TYRE_PRESSURE_REAR_RIGHT', $this->Translate('Tyre Presure rear right'), 'JIC.Preasure');
+        $this->RegisterVariableBoolean('DOOR_FRONT_LEFT_LOCK_STATUS', $this->Translate('Door front left status'), 'JIC.Lock');
+        $this->RegisterVariableBoolean('WINDOW_REAR_LEFT_STATUS', $this->Translate('Window rear left'), 'JIC.Position');
+        $this->RegisterVariableFloat('TYRE_PRESSURE_FRONT_RIGHT', $this->Translate('Tyre Presure front right'), 'JIC.Preasure');
+        $this->RegisterVariableBoolean('DOOR_BOOT_POSITION', $this->Translate('Trunk'), 'JIC.Position');
+        $this->RegisterVariableFloat('TYRE_PRESSURE_FRONT_LEFT', $this->Translate('Tyre Presure front left'), 'JIC.Preasure');
+        $this->RegisterVariableFloat('ODOMETER_METER', $this->Translate('Mileage'), 'JIC.Range');
+        $this->RegisterVariableFloat('BATTERY_VOLTAGE', $this->Translate('Battery voltage'), '~Volt');
+        $this->RegisterVariableFloat('TYRE_PRESSURE_REAR_LEFT', $this->Translate('Tyre Presure rear left'), 'JIC.Preasure');
+        $this->RegisterVariableBoolean('WINDOW_FRONT_LEFT_STATUS', $this->Translate('Window front left'), 'JIC.Position');
+        $this->RegisterVariableString('TYRE_STATUS_REAR_RIGHT', $this->Translate('Tyre status rear right'), '');
+        $this->RegisterVariableBoolean('DOOR_BOOT_LOCK_STATUS', $this->Translate('Trunk Status'), 'JIC.Lock');
     }
 
     public function Destroy()
@@ -112,7 +111,17 @@ class JaguarVehicleInformation extends IPSModule
         }
         foreach ($Data['vehicleStatus']['coreStatus'] as $Value) {
             if (@$this->GetIDForIdent($Value['key']) != false) {
-                $this->SetValue($Value['key'], $Value['value']);
+                switch ($Value['key']) {
+                    case 'TYRE_PRESSURE_REAR_RIGHT':
+                    case 'TYRE_PRESSURE_FRONT_RIGHT':
+                    case 'TYRE_PRESSURE_FRONT_LEFT':
+                    case 'TYRE_PRESSURE_REAR_LEFT':
+                        $this->SetValue($Value['key'] / 100, $Value['value']);
+                        break;
+                    default:
+                        $this->SetValue($Value['key'], $Value['value']);
+                        break;
+                }
             } else {
                 $this->SendDebug('Variable not exist', 'Key: ' . $Value['key'] . ' - Value: ' . $Value['value'], 0);
             }
