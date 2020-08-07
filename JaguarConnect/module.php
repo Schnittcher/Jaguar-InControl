@@ -208,6 +208,7 @@ class JaguarConnect extends IPSModule
 
         $this->deviceRegistration();
         $this->loginUser();
+        return true;
     }
 
     private function deviceRegistration()
@@ -241,7 +242,7 @@ class JaguarConnect extends IPSModule
         $tokenExpires = $this->ReadAttributeString('TokenExpires');
 
 
-        if ($accessToken == '' || time() >= intval(time() + $tokenExpires)) {
+        if ($accessToken == '' || time() >= intval(time() + $tokenExpires - 3600)) { // Eine Stunde bevor der Token abläuft soll diese erneuert werden.
             if ($this->refreshToken()) {
                 $this->LogMessage('Token expired, refresh Token',KL_NOTIFY);
                 $accessToken = $this->ReadAttributeString('Token');
