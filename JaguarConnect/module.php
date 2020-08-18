@@ -42,29 +42,32 @@ class JaguarConnect extends IPSModule
 
         $Username = $this->ReadPropertyString('Username');
         $Password = $this->ReadPropertyString('Password');
+        $accessToken = $this->ReadAttributeString('access_token');
+        $tokenExpires = $this->ReadAttributeString('TokenExpires');
 
         $FormElementCount = 2;
-        if ($Username || $Password != '') {
+        if (($Username && $Password != '') && ($accessToken == '' || time() >= intval(time() + $tokenExpires))) {
             $this->authRequest();
             $this->deviceRegistration();
             $this->loginUser();
-
-            $Vehicles = $this->getVehicles()['vehicles'];
-            if (count($Vehicles) > 0) {
-                $Form['elements'][$FormElementCount]['type'] = 'Select';
-                $Form['elements'][$FormElementCount]['name'] = 'Vehicles';
-                $Form['elements'][$FormElementCount]['caption'] = 'Vehicles';
-                $selectOptions[0]['caption'] = $this->Translate('Please select a car!');
-                $selectOptions[0]['value'] = '0';
-                $optionsElementCount = 1;
-                foreach ($Vehicles as $Vehicle) {
-                    $selectOptions[$optionsElementCount]['caption'] = $Vehicle['vin'];
-                    $selectOptions[$optionsElementCount]['value'] = $Vehicle['vin'];
-                    $optionsElementCount++;
-                }
-                $Form['elements'][$FormElementCount]['options'] = $selectOptions;
-            }
         }
+
+        $Vehicles = $this->getVehicles()['vehicles'];
+        if (count($Vehicles) > 0) {
+            $Form['elements'][$FormElementCount]['type'] = 'Select';
+            $Form['elements'][$FormElementCount]['name'] = 'Vehicles';
+            $Form['elements'][$FormElementCount]['caption'] = 'Vehicles';
+            $selectOptions[0]['caption'] = $this->Translate('Please select a car!');
+            $selectOptions[0]['value'] = '0';
+            $optionsElementCount = 1;
+            foreach ($Vehicles as $Vehicle) {
+                $selectOptions[$optionsElementCount]['caption'] = $Vehicle['vin'];
+                $selectOptions[$optionsElementCount]['value'] = $Vehicle['vin'];
+                $optionsElementCount++;
+            }
+            $Form['elements'][$FormElementCount]['options'] = $selectOptions;
+        }
+
         return json_encode($Form);
     }
 
@@ -121,6 +124,48 @@ class JaguarConnect extends IPSModule
         return $this->getRequest($url, $header);
     }
 
+    public function refreshToken()
+    {
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $this->token_url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+            'Content-Type: application/json',
+            'Authorization: Basic YXM6YXNwYXNz',
+            'X-Device-Id: ' . $this->ReadAttributeString('DeviceID'),
+            'Connection: close',
+        ]);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode([
+            'grant_type'       => 'refresh_token',
+            'refresh_token'    => $this->ReadAttributeString('refresh_token'),
+            'username'         => $this->ReadPropertyString('Username'),
+        ]));
+
+        $apiResult = curl_exec($ch);
+
+        $this->SendDebug(__FUNCTION__ . ' API Result', $apiResult, 0);
+
+        if ($apiResult === false) {
+            die('Curl-Fehler: ' . curl_error($ch));
+        }
+        $apiResultJson = json_decode($apiResult, true);
+        curl_close($ch);
+
+        if (!array_key_exists('access_token', $apiResultJson) || !array_key_exists('expires_in', $apiResultJson) || $apiResultJson === null) {
+            $this->SendDebug(__FUNCTION__, 'Invalid response while fetching access token!', 0);
+            return false;
+        }
+
+        $access_token = $apiResultJson['access_token'];
+        $TokenExpires = $apiResultJson['expires_in'];
+
+        $this->WriteAttributeString('TokenExpires', $TokenExpires);
+        $this->WriteAttributeString('access_token', $access_token);
+
+        return true;
+    }
+
     private function authRequest()
     {
         $ch = curl_init();
@@ -167,50 +212,6 @@ class JaguarConnect extends IPSModule
         return true;
     }
 
-    private function refreshToken()
-    {
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $this->token_url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, [
-            'Content-Type: application/json',
-            'Authorization: Basic YXM6YXNwYXNz',
-            'X-Device-Id: ' . $this->ReadAttributeString('DeviceID'),
-            'Connection: close',
-        ]);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode([
-            'grant_type'       => 'refresh_token',
-            'refresh_token'    => $this->ReadAttributeString('refresh_token'),
-            'username'         => $this->ReadPropertyString('Username'),
-        ]));
-
-        $apiResult = curl_exec($ch);
-
-        $this->SendDebug(__FUNCTION__ . ' API Result', $apiResult, 0);
-
-        if ($apiResult === false) {
-            die('Curl-Fehler: ' . curl_error($ch));
-        }
-        $apiResultJson = json_decode($apiResult, true);
-        curl_close($ch);
-
-        if (!array_key_exists('access_token', $apiResultJson) || !array_key_exists('expires_in', $apiResultJson) || $apiResultJson === null) {
-            $this->SendDebug(__FUNCTION__, 'Invalid response while fetching access token!', 0);
-            return false;
-        }
-
-        $access_token = $apiResultJson['access_token'];
-        $TokenExpires = $apiResultJson['expires_in'];
-
-        $this->WriteAttributeString('TokenExpires', $TokenExpires);
-        $this->WriteAttributeString('access_token', $access_token);
-
-        $this->deviceRegistration();
-        $this->loginUser();
-        return true;
-    }
-
     private function deviceRegistration()
     {
         $ch = curl_init();
@@ -242,10 +243,9 @@ class JaguarConnect extends IPSModule
         $tokenExpires = $this->ReadAttributeString('TokenExpires');
 
         if ($accessToken == '' || time() >= intval(time() + $tokenExpires - 3600)) { // Eine Stunde bevor der Token abläuft soll dieser erneuert werden.
-            if ($this->refreshToken()) {
-                $this->LogMessage('Token expired, refresh Token', KL_NOTIFY);
-                $accessToken = $this->ReadAttributeString('Token');
-            }
+            $this->refreshToken();
+            $this->LogMessage('Token expired, refresh Token', KL_NOTIFY);
+            $accessToken = $this->ReadAttributeString('access_token');
         } elseif ($accessToken == '' || time() >= intval(time() + $tokenExpires)) {
             $this->LogMessage($this->Translate('Token Refresh with authRequest'), KL_NOTIFY);
             $this->authRequest();
