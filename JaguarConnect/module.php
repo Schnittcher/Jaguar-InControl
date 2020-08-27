@@ -20,6 +20,7 @@ class JaguarConnect extends IPSModule
         $this->RegisterAttributeString('authorization_token', '');
         $this->RegisterAttributeString('refresh_token', '');
         $this->RegisterAttributeString('TokenExpires', '');
+        $this->RegisterAttributeString('TokenExpiresTime', '');
         $this->RegisterAttributeString('UserID', '');
     }
 
@@ -43,14 +44,13 @@ class JaguarConnect extends IPSModule
         $Username = $this->ReadPropertyString('Username');
         $Password = $this->ReadPropertyString('Password');
         $accessToken = $this->ReadAttributeString('access_token');
-        $tokenExpires = $this->ReadAttributeString('TokenExpires');
+        $tokenExpiresTime = $this->ReadAttributeString('TokenExpiresTime');
 
         $FormElementCount = 2;
-        if (($Username && $Password != '') || ($accessToken == '') || (time() >= intval($tokenExpires))) {
-            $this->authRequest();
-            $this->deviceRegistration();
-            $this->loginUser();
-        }
+
+        $this->authRequest();
+        $this->deviceRegistration();
+        $this->loginUser();
 
         $Vehicles = $this->getVehicles()['vehicles'];
         if (count($Vehicles) > 0) {
@@ -158,8 +158,10 @@ class JaguarConnect extends IPSModule
         }
 
         $access_token = $apiResultJson['access_token'];
-        $TokenExpires = time() + $apiResultJson['expires_in'];
+        $TokenExpires = $apiResultJson['expires_in'];
+        $TokenExpiresTime = time() + $apiResultJson['expires_in'];
 
+        $this->WriteAttributeString('TokenExpiresTime', $TokenExpiresTime);
         $this->WriteAttributeString('TokenExpires', $TokenExpires);
         $this->WriteAttributeString('access_token', $access_token);
 
@@ -207,12 +209,14 @@ class JaguarConnect extends IPSModule
         $access_token = $apiResultJson['access_token'];
         $authorization_token = $apiResultJson['authorization_token'];
         $refresh_token = $apiResultJson['refresh_token'];
-        $TokenExpires = time() + $apiResultJson['expires_in'];
+        $TokenExpires = $apiResultJson['expires_in'];
+        $TokenExpiresTime = time() + $apiResultJson['expires_in'];
 
         $this->WriteAttributeString('access_token', $access_token);
         $this->WriteAttributeString('authorization_token', $authorization_token);
         $this->WriteAttributeString('refresh_token', $refresh_token);
         $this->WriteAttributeString('TokenExpires', $TokenExpires);
+        $this->WriteAttributeString('TokenExpiresTime', $TokenExpiresTime);
 
         return true;
     }
@@ -236,6 +240,7 @@ class JaguarConnect extends IPSModule
         ]));
 
         $apiResult = curl_exec($ch);
+        $this->LogMessage($apiResult, KL_NOTIFY);
         $this->SendDebug(__FUNCTION__ . ' API Result', $apiResult, 0);
         curl_close($ch);
 
@@ -245,13 +250,16 @@ class JaguarConnect extends IPSModule
     private function getRequest($url, $header)
     {
         $accessToken = $this->ReadAttributeString('access_token');
-        $tokenExpires = $this->ReadAttributeString('TokenExpires');
+        $tokenExpiresTime = $this->ReadAttributeString('TokenExpiresTime');
 
-        if (($accessToken == '') || (time() >= intval($tokenExpires - 3600))) { // Eine Stunde bevor der Token abläuft soll dieser erneuert werden.
+        $this->LogMessage($url, KL_NOTIFY);
+        $this->LogMessage(print_r($header, true), KL_NOTIFY);
+
+        if (($accessToken == '') || (time() >= intval($tokenExpiresTime - 3600))) { // Eine Stunde bevor der Token abläuft soll dieser erneuert werden.
             $this->refreshToken();
             $this->LogMessage('Token expired, refresh Token', KL_NOTIFY);
             $accessToken = $this->ReadAttributeString('access_token');
-        } elseif (($accessToken == '') || (time() >= intval($tokenExpires))) {
+        } elseif (($accessToken == '') || (time() >= intval($tokenExpiresTime))) {
             $this->LogMessage($this->Translate('Token Refresh with authRequest'), KL_NOTIFY);
             $this->authRequest();
             $this->deviceRegistration();
@@ -270,6 +278,7 @@ class JaguarConnect extends IPSModule
         curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
 
         $apiResult = curl_exec($ch);
+        $this->LogMessage($apiResult, KL_NOTIFY);
         $this->SendDebug(__FUNCTION__ . ' API Result', $apiResult, 0);
 
         $apiResultJson = json_decode($apiResult, true);
