@@ -158,7 +158,7 @@ class JaguarConnect extends IPSModule
         }
 
         $access_token = $apiResultJson['access_token'];
-        $TokenExpires = $apiResultJson['expires_in'];
+        $TokenExpires = time() + $apiResultJson['expires_in'];
 
         $this->WriteAttributeString('TokenExpires', $TokenExpires);
         $this->WriteAttributeString('access_token', $access_token);
@@ -207,7 +207,7 @@ class JaguarConnect extends IPSModule
         $access_token = $apiResultJson['access_token'];
         $authorization_token = $apiResultJson['authorization_token'];
         $refresh_token = $apiResultJson['refresh_token'];
-        $TokenExpires = $apiResultJson['expires_in'];
+        $TokenExpires = time() + $apiResultJson['expires_in'];
 
         $this->WriteAttributeString('access_token', $access_token);
         $this->WriteAttributeString('authorization_token', $authorization_token);
@@ -247,11 +247,11 @@ class JaguarConnect extends IPSModule
         $accessToken = $this->ReadAttributeString('access_token');
         $tokenExpires = $this->ReadAttributeString('TokenExpires');
 
-        if (($accessToken == '') || (time() >= intval(time() + $tokenExpires - 3600))) { // Eine Stunde bevor der Token abläuft soll dieser erneuert werden.
+        if (($accessToken == '') || (time() >= intval($tokenExpires - 3600))) { // Eine Stunde bevor der Token abläuft soll dieser erneuert werden.
             $this->refreshToken();
             $this->LogMessage('Token expired, refresh Token', KL_NOTIFY);
             $accessToken = $this->ReadAttributeString('access_token');
-        } elseif (($accessToken == '') || (time() >= intval(time() + $tokenExpires))) {
+        } elseif (($accessToken == '') || (time() >= intval($tokenExpires))) {
             $this->LogMessage($this->Translate('Token Refresh with authRequest'), KL_NOTIFY);
             $this->authRequest();
             $this->deviceRegistration();
