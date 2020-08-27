@@ -20,7 +20,7 @@ class JaguarConnect extends IPSModule
         $this->RegisterAttributeString('authorization_token', '');
         $this->RegisterAttributeString('refresh_token', '');
         $this->RegisterAttributeString('TokenExpires', '');
-        $this->RegisterAttributeString('TokenExpiresTime', '');
+        $this->RegisterAttributeInteger('TokenExpiresTime', '');
         $this->RegisterAttributeString('UserID', '');
     }
 
@@ -44,7 +44,7 @@ class JaguarConnect extends IPSModule
         $Username = $this->ReadPropertyString('Username');
         $Password = $this->ReadPropertyString('Password');
         $accessToken = $this->ReadAttributeString('access_token');
-        $tokenExpiresTime = $this->ReadAttributeString('TokenExpiresTime');
+        $tokenExpiresTime = $this->ReadAttributeInteger('TokenExpiresTime');
 
         $FormElementCount = 2;
 
@@ -161,7 +161,7 @@ class JaguarConnect extends IPSModule
         $TokenExpires = $apiResultJson['expires_in'];
         $TokenExpiresTime = time() + $apiResultJson['expires_in'];
 
-        $this->WriteAttributeString('TokenExpiresTime', $TokenExpiresTime);
+        $this->WriteAttributeInteger('TokenExpiresTime', $TokenExpiresTime);
         $this->WriteAttributeString('TokenExpires', $TokenExpires);
         $this->WriteAttributeString('access_token', $access_token);
 
@@ -216,7 +216,7 @@ class JaguarConnect extends IPSModule
         $this->WriteAttributeString('authorization_token', $authorization_token);
         $this->WriteAttributeString('refresh_token', $refresh_token);
         $this->WriteAttributeString('TokenExpires', $TokenExpires);
-        $this->WriteAttributeString('TokenExpiresTime', $TokenExpiresTime);
+        $this->WriteAttributeInteger('TokenExpiresTime', $TokenExpiresTime);
 
         return true;
     }
@@ -250,7 +250,7 @@ class JaguarConnect extends IPSModule
     private function getRequest($url, $header)
     {
         $accessToken = $this->ReadAttributeString('access_token');
-        $tokenExpiresTime = $this->ReadAttributeString('TokenExpiresTime');
+        $tokenExpiresTime = $this->ReadAttributeInteger('TokenExpiresTime');
 
         $this->LogMessage($url, KL_NOTIFY);
         $this->LogMessage(print_r($header, true), KL_NOTIFY);
