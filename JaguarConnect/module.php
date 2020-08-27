@@ -46,7 +46,7 @@ class JaguarConnect extends IPSModule
         $tokenExpires = $this->ReadAttributeString('TokenExpires');
 
         $FormElementCount = 2;
-        if (($Username && $Password != '') && ($accessToken == '' || time() >= intval(time() + $tokenExpires))) {
+        if (($Username && $Password != '') || ($accessToken == '') || (time() >= intval($tokenExpires))) {
             $this->authRequest();
             $this->deviceRegistration();
             $this->loginUser();
