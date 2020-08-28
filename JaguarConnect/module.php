@@ -20,7 +20,7 @@ class JaguarConnect extends IPSModule
         $this->RegisterAttributeString('authorization_token', '');
         $this->RegisterAttributeString('refresh_token', '');
         $this->RegisterAttributeString('TokenExpires', '');
-        $this->RegisterAttributeInteger('TokenExpiresTime', '');
+        $this->RegisterAttributeInteger('TokenExpiresTime', 0);
         $this->RegisterAttributeString('UserID', '');
     }
 
