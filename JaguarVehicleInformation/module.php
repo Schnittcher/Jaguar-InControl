@@ -1,7 +1,7 @@
 <?php
 
 declare(strict_types=1);
-require_once __DIR__ . '/../libs/VariableProfileHelper.php';
+require_once __DIR__ . '/../libs/vendor/SymconModulHelper/VariableProfileHelper.php';
 class JaguarVehicleInformation extends IPSModule
 {
     use VariableProfileHelper;
