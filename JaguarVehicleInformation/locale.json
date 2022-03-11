@@ -41,10 +41,10 @@
             "Mileage": "Kilometerstand",
             "Battery voltage": "Batteriespannung",
             "Tyre Pressure rear left": "Reifendruck hinten links",
-            "Window front left":"Fenster vorne links",
-            "Door rear left":"Türe hinten links",
-            "Tyre status rear right":"Reifenstatus hinten rechts",
-            "Trunk Status":"Kofferraum Status"
+            "Window front left": "Fenster vorne links",
+            "Door rear left": "Türe hinten links",
+            "Tyre status rear right": "Reifenstatus hinten rechts",
+            "Trunk Status": "Kofferraum Status"
         }
     }
 }
